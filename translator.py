@@ -8,29 +8,30 @@ class Translator:
         self.accept()
         self.formatting()
 
-    def __init__(self, lang='', word=''):
-        self.lang = lang
+    def __init__(self, src_lang='', trans_lang='', word=''):
+        self.src_lang = src_lang
+        self.trans_lang = trans_lang
         self.word = word
 
     def accept(self):
-        lang = input(
-            'Type "en" if you want to translate from French into English, or "fr" if you want to translate from English into French:')
+        print("Hello, you're welcome to the translator. Translator supports: ")
+        lang_list = ['Arabic', 'German', 'English', 'Spanish', 'French', 'Hebrew', 'Japanese', 'Dutch', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish']
+        for no, lang in enumerate(lang_list):
+            print(no+1, '. ', lang, sep='')
+        src_lang = int(input('Type the number of your language: '))  # to be translated
+        trans_lang = int(input('Type the number of language you want to translate to: '))
         word = input('Type the word you want to translate:')
-        self.__init__(lang, word)
-        print(f'You chose "{lang}" as the language to translate "{word}" to.')
+        self.__init__(src_lang=lang_list[src_lang-1], trans_lang=lang_list[trans_lang-1], word=word)
 
     def url_gen(self):
-        if self.lang == 'en':
-            return f'https://context.reverso.net/translation/french-english/{self.word}'
-
-        if self.lang == 'fr':
-            return f'https://context.reverso.net/translation/english-french/{self.word}'
+        src_low = self.src_lang.lower()
+        trans_lower = self.trans_lang.lower()
+        return f'https://context.reverso.net/translation/{src_low}-{trans_lower}/{self.word}'
 
     def connect(self):
         user_agent = 'Mozilla/5.0'
         url = self.url_gen()
         req_obj = requests.get(url, headers={'User-Agent': user_agent})
-        print(req_obj.status_code, 'OK', end='\n')
         return req_obj
 
     def parse(self):
@@ -46,10 +47,10 @@ class Translator:
         words, examples = self.parse()
         print('Context examples:\n')
 
-        print('Translations:')
+        print(f'{self.trans_lang} Translations:')
         print(*words[:no_word], sep='\n', end='\n\n')
 
-        print('Examples:')
+        print(f'{self.trans_lang} Examples:')
         for i in range(no_examples):
             print(examples[i])
             print(examples[i+1], '\n')

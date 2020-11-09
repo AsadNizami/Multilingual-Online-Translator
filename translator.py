@@ -6,18 +6,18 @@ class Translator:
 
     def start(self):
         self.accept()
-        self.display()
+        self.formatting()
 
     def __init__(self, lang='', word=''):
         self.lang = lang
         self.word = word
-        
+
     def accept(self):
-        lang = input('Type "en" if you want to translate from French into English, or "fr" if you want to translate from English into French:')
+        lang = input(
+            'Type "en" if you want to translate from French into English, or "fr" if you want to translate from English into French:')
         word = input('Type the word you want to translate:')
         self.__init__(lang, word)
-        print(f'You chose "{lang}" as the language to translate "{word} to".')
-
+        print(f'You chose "{lang}" as the language to translate "{word}" to.')
 
     def url_gen(self):
         if self.lang == 'en':
@@ -30,7 +30,7 @@ class Translator:
         user_agent = 'Mozilla/5.0'
         url = self.url_gen()
         req_obj = requests.get(url, headers={'User-Agent': user_agent})
-        print(req_obj.status_code, 'OK')
+        print(req_obj.status_code, 'OK', end='\n')
         return req_obj
 
     def parse(self):
@@ -41,9 +41,18 @@ class Translator:
         examples = [x.text.strip() for x in soup.find_all(class_=['src ltr', 'trg ltr'])]
         return words, examples
 
-    def display(self):
-        word, examples = self.parse()
-        print('Translated word:', word, 'Examples:', examples, sep='\n')
+    def formatting(self):
+        no_word = no_examples = 5
+        words, examples = self.parse()
+        print('Context examples:\n')
+
+        print('Translations:')
+        print(*words[:no_word], sep='\n', end='\n\n')
+
+        print('Examples:')
+        for i in range(no_examples):
+            print(examples[i])
+            print(examples[i+1], '\n')
 
 
 if __name__ == '__main__':

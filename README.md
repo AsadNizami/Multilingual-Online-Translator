@@ -1,5 +1,5 @@
 # Multilingual-Translator
-Translates word and gives examples for its usage.
+Translates word and gives examples for it's usage.
 
 ## General Info
 ### Supports 13 languages:

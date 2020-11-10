@@ -1,8 +1,8 @@
 # Multilingual-Translator
 Translates word and gives examples for its usage.
 
-##General Info
-###Supports 13 languages:
+## General Info
+### Supports 13 languages:
 * Arabic
 * German
 * English
@@ -17,4 +17,4 @@ Translates word and gives examples for its usage.
 * Russian
 * Turkish
 
-###Supports command line argument
+### Supports command line argument

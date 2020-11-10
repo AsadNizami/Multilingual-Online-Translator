@@ -1,4 +1,5 @@
 import requests
+import sys
 from bs4 import BeautifulSoup
 
 
@@ -22,13 +23,30 @@ class Translator:
         self.lang_ind = 0
 
     def accept(self):
-        print("Hello, welcome to the translator. Translator supports: ")
+        sys_arg = sys.argv
 
-        for no, lang in enumerate(self.lang_list):
-            print(no+1, '. ', lang, sep='')
-        src_lang = int(input('Type the number of your language: '))  # to be translated
-        trans_lang = int(input('Type the number of language you want to translate to or "0" to translate to all languages:'))
-        word = input('Type the word you want to translate:')
+        if len(sys_arg) == 1:
+            print("Hello, welcome to the translator. Translator supports: ")
+
+            for no, lang in enumerate(self.lang_list):
+                print(no + 1, '. ', lang, sep='')
+            src_lang = int(input('Type the number of your language: '))  # to be translated
+            trans_lang = int(input(
+                    'Type the number of language you want to translate to or "0" to translate to all languages:'))
+            word = input('Type the word you want to translate:')
+
+        else:
+            src_lang_st = sys_arg[1]
+            trans_lang_st = sys_arg[2]
+            word = sys_arg[3]
+
+            src_lang = self.lang_list.index(src_lang_st.capitalize()) + 1
+
+            if trans_lang_st == 'all':
+                trans_lang = 0
+            else:
+                trans_lang = self.lang_list.index(trans_lang_st.capitalize()) + 1
+
         if trans_lang != 0:
             self.__init__(src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
         else:
@@ -70,17 +88,17 @@ class Translator:
         examples = [x.text.strip() for x in soup.find_all(class_=['src ltr', class_mod])]
         return words, examples
 
-    def formatting(self, req_obj):
+    def formatting(self, req_obj):  
         words, examples = self.parse(req_obj=req_obj)
         no_word = no_examples = 5
         final_lang = self.trans_lang
 
+        if self.src_lang == self.lang_list[self.lang_ind]:
+            self.lang_ind += 1
+
         if self.trans_lang is None:
             no_examples = no_word = 1
             final_lang = self.lang_list[self.lang_ind]
-
-        if self.src_lang == self.lang_list[self.lang_ind - 1]:
-            self.lang_ind += 1
 
         print(f'{final_lang} Translations:')
         print(*words[:no_word], sep='\n', end='\n\n')
@@ -95,7 +113,6 @@ class Translator:
         self.save_2_file(final_lang=final_lang, words=words, examples=examples, no_word=no_word)
         self.lang_ind += 1
 
-    # under construction
     def save_2_file(self, final_lang, words, examples, no_word):
         file_name = self.word+'.txt'
         with open(file_name, 'a', encoding='utf-8') as file_out:

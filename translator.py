@@ -12,8 +12,10 @@ class Translator:
             self.formatting(req_obj=req_obj)
 
     @staticmethod
-    def except_handler(lang=None):
-        if lang is not None:
+    def except_handler(lang=None, issue='other'):
+        if issue == 'len_input':
+            print('Unexpected number of input', file=sys.stderr)
+        elif lang is not None:
             print("Sorry, the program doesn't support", lang, file=sys.stderr)
         else:
             print('Input the number from 1-13', file=sys.stderr)
@@ -30,10 +32,12 @@ class Translator:
             'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish'
         ]
 
-        self.lang_ind = 0 if trans_lang is None else 1
+        self.lang_ind = 0 if not trans_lang == 'arabic' else 1
 
     def accept(self):
         sys_arg = sys.argv
+        if not any([len(sys_arg) == 1, len(sys_arg) == 4]):
+            self.except_handler(issue='len_input')
 
         if len(sys_arg) == 1:
             print("Hello, welcome to the translator. Translator supports: ")
@@ -51,6 +55,7 @@ class Translator:
             src_lang_st = sys_arg[1]
             trans_lang_st = sys_arg[2]
             word = sys_arg[3]
+
             if src_lang_st.capitalize() not in self.lang_list:
                 self.except_handler(src_lang_st)
             if not any([trans_lang_st.capitalize() in self.lang_list, trans_lang_st == 'all']):
@@ -116,7 +121,7 @@ class Translator:
 
     def formatting(self, req_obj):  
         words, examples = self.parse(req_obj=req_obj)
-        no_word = no_examples = 5
+        no_word = no_examples = 5  # Number of output
         final_lang = self.trans_lang
 
         if self.src_lang == self.lang_list[self.lang_ind]:

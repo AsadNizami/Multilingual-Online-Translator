@@ -31,8 +31,9 @@ class Translator:
             'French', 'Hebrew', 'Japanese', 'Dutch',
             'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish'
         ]
-
-        self.lang_ind = 0 if not trans_lang == 'arabic' else 1
+        self.lang_ind = 0
+        if trans_lang:
+            self.lang_ind = 1 if not trans_lang == 'Arabic' else 0
 
     def accept(self):
         sys_arg = sys.argv

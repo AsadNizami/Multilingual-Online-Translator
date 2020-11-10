@@ -19,5 +19,5 @@ Translates word and gives examples for it's usage.
 
 ### Supports command line argument
 
-### Usage
+### Usage:
 ![Test Output](image/usage.PNG)

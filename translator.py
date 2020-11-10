@@ -11,6 +11,15 @@ class Translator:
         for req_obj in req_obj_list:
             self.formatting(req_obj=req_obj)
 
+    @staticmethod
+    def except_handler(lang=None):
+        if lang is not None:
+            print("Sorry, the program doesn't support", lang, file=sys.stderr)
+        else:
+            print('Input the number from 1-13', file=sys.stderr)
+
+        exit()
+
     def __init__(self, src_lang=None, trans_lang=None, word=''):
         self.src_lang = src_lang
         self.trans_lang = trans_lang
@@ -20,7 +29,8 @@ class Translator:
             'French', 'Hebrew', 'Japanese', 'Dutch',
             'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish'
         ]
-        self.lang_ind = 0
+
+        self.lang_ind = 0 if trans_lang is None else 1
 
     def accept(self):
         sys_arg = sys.argv
@@ -33,12 +43,18 @@ class Translator:
             src_lang = int(input('Type the number of your language: '))  # to be translated
             trans_lang = int(input(
                     'Type the number of language you want to translate to or "0" to translate to all languages:'))
+            if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
+                self.except_handler()
             word = input('Type the word you want to translate:')
 
         else:
             src_lang_st = sys_arg[1]
             trans_lang_st = sys_arg[2]
             word = sys_arg[3]
+            if src_lang_st.capitalize() not in self.lang_list:
+                self.except_handler(src_lang_st)
+            if not any([trans_lang_st.capitalize() in self.lang_list, trans_lang_st == 'all']):
+                self.except_handler(trans_lang_st)
 
             src_lang = self.lang_list.index(src_lang_st.capitalize()) + 1
 
@@ -73,9 +89,14 @@ class Translator:
         user_agent = 'Mozilla/5.0'
         url_list = self.url_gen()
         req_obj_list = []
-        for url in url_list:
-            req_obj = requests.get(url, headers={'User-Agent': user_agent})
-            req_obj_list.append(req_obj)
+
+        try:
+            for url in url_list:
+                req_obj = requests.get(url, headers={'User-Agent': user_agent})
+                req_obj_list.append(req_obj)
+
+        except requests.exceptions.ConnectionError as e:
+            print('Something wrong with your internet connection', file=sys.stderr)
 
         return req_obj_list
 
@@ -83,10 +104,15 @@ class Translator:
         parser = 'html.parser'
         data = req_obj.content
         soup = BeautifulSoup(data, parser)
-        words = soup.find(id='translations-content').text.split()
-        class_mod = 'trg rtl arabic' if self.lang_ind == 0 else 'trg ltr'
-        examples = [x.text.strip() for x in soup.find_all(class_=['src ltr', class_mod])]
-        return words, examples
+        try:
+            words = soup.find(id='translations-content').text.split()
+            trans_mod = 'trg rtl arabic' if self.lang_ind == 0 else 'trg ltr'
+            examples = [x.text.strip() for x in soup.find_all(class_=['src ltr', trans_mod])]
+            return words, examples
+
+        except AttributeError:
+            print('Sorry, unable to find', self.word, file=sys.stderr)
+            exit()
 
     def formatting(self, req_obj):  
         words, examples = self.parse(req_obj=req_obj)

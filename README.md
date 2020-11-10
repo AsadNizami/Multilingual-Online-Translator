@@ -18,3 +18,6 @@ Translates word and gives examples for it's usage.
 * Turkish
 
 ### Supports command line argument
+
+### Usage
+![Test Output](image/usage.PNG)

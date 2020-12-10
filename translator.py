@@ -3,6 +3,14 @@ import sys
 from bs4 import BeautifulSoup
 
 
+##global variables
+
+global_final_lang = ""
+global_words = ""
+global_examples = ""
+global_no_word = 0
+
+
 class Translator:
 
     def start(self):
@@ -10,6 +18,12 @@ class Translator:
         req_obj_list = self.connect()
         for req_obj in req_obj_list:
             self.formatting(req_obj=req_obj)
+    
+    def display(self):
+        req_obj_list = self.connect()
+        for req_obj in req_obj_list:
+            self.formatting(req_obj=req_obj)
+        return(global_final_lang, global_words, global_examples, global_no_word)
 
     @staticmethod
     def except_handler(lang=None, issue='other'):
@@ -35,44 +49,44 @@ class Translator:
         if trans_lang:
             self.lang_ind = 1 if not trans_lang == 'Arabic' else 0
 
-    def accept(self):
-        sys_arg = sys.argv
-        if not any([len(sys_arg) == 1, len(sys_arg) == 4]):
-            self.except_handler(issue='len_input')
+    # def accept(self):
+    #     sys_arg = sys.argv
+    #     if not any([len(sys_arg) == 1, len(sys_arg) == 4]):
+    #         self.except_handler(issue='len_input')
 
-        if len(sys_arg) == 1:
-            print("Hello, welcome to the translator. Translator supports: ")
+    #     if len(sys_arg) == 1:
+    #         print("Hello, welcome to the translator. Translator supports: ")
 
-            for no, lang in enumerate(self.lang_list):
-                print(no + 1, '. ', lang, sep='')
-            src_lang = int(input('Type the number of your language: '))  # to be translated
-            trans_lang = int(input(
-                    'Type the number of language you want to translate to or "0" to translate to all languages:'))
-            if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
-                self.except_handler()
-            word = input('Type the word you want to translate:')
+    #         for no, lang in enumerate(self.lang_list):
+    #             print(no + 1, '. ', lang, sep='')
+    #         src_lang = int(input('Type the number of your language: '))  # to be translated
+    #         trans_lang = int(input(
+    #                 'Type the number of language you want to translate to or "0" to translate to all languages:'))
+    #         if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
+    #             self.except_handler()
+    #         word = input('Type the word you want to translate:')
 
-        else:
-            src_lang_st = sys_arg[1]
-            trans_lang_st = sys_arg[2]
-            word = sys_arg[3]
+    #     else:
+    #         src_lang_st = sys_arg[1]
+    #         trans_lang_st = sys_arg[2]
+    #         word = sys_arg[3]
 
-            if src_lang_st.capitalize() not in self.lang_list:
-                self.except_handler(src_lang_st)
-            if not any([trans_lang_st.capitalize() in self.lang_list, trans_lang_st == 'all']):
-                self.except_handler(trans_lang_st)
+    #         if src_lang_st.capitalize() not in self.lang_list:
+    #             self.except_handler(src_lang_st)
+    #         if not any([trans_lang_st.capitalize() in self.lang_list, trans_lang_st == 'all']):
+    #             self.except_handler(trans_lang_st)
 
-            src_lang = self.lang_list.index(src_lang_st.capitalize()) + 1
+    #         src_lang = self.lang_list.index(src_lang_st.capitalize()) + 1
 
-            if trans_lang_st == 'all':
-                trans_lang = 0
-            else:
-                trans_lang = self.lang_list.index(trans_lang_st.capitalize()) + 1
+    #         if trans_lang_st == 'all':
+    #             trans_lang = 0
+    #         else:
+    #             trans_lang = self.lang_list.index(trans_lang_st.capitalize()) + 1
 
-        if trans_lang != 0:
-            self.__init__(src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
-        else:
-            self.__init__(src_lang=self.lang_list[src_lang-1], word=word)
+    #     if trans_lang != 0:
+    #         self.__init__(src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
+    #     else:
+    #         self.__init__(src_lang=self.lang_list[src_lang-1], word=word)
 
     def url_gen(self):
         src_low = self.src_lang.lower()
@@ -132,18 +146,24 @@ class Translator:
             no_examples = no_word = 1
             final_lang = self.lang_list[self.lang_ind]
 
-        print(f'{final_lang} Translations:')
-        print(*words[:no_word], sep='\n', end='\n\n')
+        # print(f'{final_lang} Translations:')
+        # print(*words[:no_word], sep='\n', end='\n\n')
 
-        print(f'{final_lang} Examples:')
-        i = 0
-        for _ in range(no_examples):
-            print(examples[i])
-            print(examples[i+1], '\n')
-            i += 2
+        # print(f'{final_lang} Examples:')
+        # i = 0
+        # for _ in range(no_examples):
+        #     print(examples[i])
+        #     print(examples[i+1], '\n')
+        #     i += 2
 
         self.save_2_file(final_lang=final_lang, words=words, examples=examples, no_word=no_word)
         self.lang_ind += 1
+        
+        global global_final_lang, global_words, global_examples, global_no_word
+        global_final_lang = final_lang
+        global_words = words
+        global_examples = examples
+        global_no_word = no_word
 
     def save_2_file(self, final_lang, words, examples, no_word):
         file_name = self.word+'.txt'

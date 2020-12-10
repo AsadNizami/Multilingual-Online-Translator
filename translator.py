@@ -1,6 +1,7 @@
 import requests
 import sys
 from bs4 import BeautifulSoup
+import os
 
 
 class Translator:
@@ -19,60 +20,52 @@ class Translator:
             print("Sorry, the program doesn't support", lang, file=sys.stderr)
         else:
             print('Input the number from 1-13', file=sys.stderr)
-
         exit()
 
-    def __init__(self, src_lang=None, trans_lang=None, word=''):
-        self.src_lang = src_lang
-        self.trans_lang = trans_lang
-        self.word = word
+    @staticmethod
+    def create_dir():
+        dir_name = 'History'
+        new_path = os.path.join(os.getcwd(), dir_name)
+        if not os.access(new_path, os.F_OK):
+            os.mkdir(new_path)
+        os.chdir(new_path)
+        return os.getcwd()
+
+    def history(self):
+        if os.access(self.path, os.R_OK):
+            with open(self.path, 'r') as file_out:
+                print(file_out.read())
+                exit()
+
+    def __init__(self, path='', src_lang='', trans_lang='', word=''):
+        self.file_name = word + '_in_' + trans_lang + '.txt'    # Name of the file in dir
+        self.path = os.path.join(path, self.file_name)          # Path of the file
+        self.src_lang = src_lang                                # Source language
+        self.trans_lang = trans_lang                            # Translated language
+        self.word = word                                        # Word to be translated
+
         self.lang_list = [
             'Arabic', 'German', 'English', 'Spanish',
-            'French', 'Hebrew', 'Japanese', 'Dutch',
-            'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish'
+            'French', 'Japanese', 'Portuguese', 'Russian',
         ]
         self.lang_ind = 0
         if trans_lang:
             self.lang_ind = 1 if not trans_lang == 'Arabic' else 0
 
+        self.history()
+
     def accept(self):
-        sys_arg = sys.argv
-        if not any([len(sys_arg) == 1, len(sys_arg) == 4]):
-            self.except_handler(issue='len_input')
+        print("Hello, welcome to the translator. Translator supports: ")
 
-        if len(sys_arg) == 1:
-            print("Hello, welcome to the translator. Translator supports: ")
+        for no, lang in enumerate(self.lang_list):
+            print(no + 1, '. ', lang, sep='')
+        src_lang = int(input('Type the number of your language: '))  # to be translated
+        trans_lang = int(input('Type the number of language you want to translate to: '))
+        if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
+            self.except_handler()
+        word = input('Type the word you want to translate: ')
 
-            for no, lang in enumerate(self.lang_list):
-                print(no + 1, '. ', lang, sep='')
-            src_lang = int(input('Type the number of your language: '))  # to be translated
-            trans_lang = int(input(
-                    'Type the number of language you want to translate to or "0" to translate to all languages:'))
-            if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
-                self.except_handler()
-            word = input('Type the word you want to translate:')
-
-        else:
-            src_lang_st = sys_arg[1]
-            trans_lang_st = sys_arg[2]
-            word = sys_arg[3]
-
-            if src_lang_st.capitalize() not in self.lang_list:
-                self.except_handler(src_lang_st)
-            if not any([trans_lang_st.capitalize() in self.lang_list, trans_lang_st == 'all']):
-                self.except_handler(trans_lang_st)
-
-            src_lang = self.lang_list.index(src_lang_st.capitalize()) + 1
-
-            if trans_lang_st == 'all':
-                trans_lang = 0
-            else:
-                trans_lang = self.lang_list.index(trans_lang_st.capitalize()) + 1
-
-        if trans_lang != 0:
-            self.__init__(src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
-        else:
-            self.__init__(src_lang=self.lang_list[src_lang-1], word=word)
+        self.__init__(path=self.create_dir(), src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
 
     def url_gen(self):
         src_low = self.src_lang.lower()
@@ -146,8 +139,7 @@ class Translator:
         self.lang_ind += 1
 
     def save_2_file(self, final_lang, words, examples, no_word):
-        file_name = self.word+'.txt'
-        with open(file_name, 'a', encoding='utf-8') as file_out:
+        with open(self.path, 'a', encoding='utf-8') as file_out:
             file_out.write(f'{final_lang} Translations:\n')
             print(*words[:no_word], file=file_out, sep='\n', end='\n\n')
 

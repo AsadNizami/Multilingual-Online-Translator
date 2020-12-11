@@ -14,8 +14,6 @@ class Translator:
 
     @staticmethod
     def except_handler(lang=None):
-        # if issue == 'len_input':
-        #     print('Unexpected number of input', file=sys.stderr)
         if lang:
             print("Sorry, the program doesn't support", lang, file=sys.stderr)
         else:
@@ -35,11 +33,14 @@ class Translator:
         if os.access(self.path, os.R_OK):
             with open(self.path, 'r', encoding='utf-8') as file_out:
                 print(file_out.read())
-                exit()
+            return True
+        else:
+            return False
 
     def __init__(self, path='', src_lang='', trans_lang='', word=''):
+        # print("LOLOLOLO")
         self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'    # Name of the file in dir
-        self.path = os.path.join(path, self.file_name)          # Path of the file
+        self.path = os.path.join(path, self.file_name)         # Path of the file
         self.src_lang = src_lang                                # Source language
         self.trans_lang = trans_lang                            # Translated language
         self.word = word                                        # Word to be translated
@@ -52,7 +53,8 @@ class Translator:
         if trans_lang:
             self.lang_ind = 1 if not trans_lang == 'Arabic' else 0
 
-        self.history()
+        if self.history():
+            return
 
     def accept(self):
         print("Hello, welcome to the translator. Translator supports: ")
@@ -64,8 +66,9 @@ class Translator:
         if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
             self.except_handler()
         word = input('Type the word you want to translate: ')
-
-        self.__init__(path=self.create_dir(), src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
+        path = ''
+        path = self.create_dir()
+        self.__init__(path=path, src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
 
     def url_gen(self):
         src_low = self.src_lang.lower()

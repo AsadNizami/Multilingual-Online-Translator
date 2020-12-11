@@ -13,10 +13,10 @@ class Translator:
             self.formatting(req_obj=req_obj)
 
     @staticmethod
-    def except_handler(lang=None, issue='other'):
-        if issue == 'len_input':
-            print('Unexpected number of input', file=sys.stderr)
-        elif lang is not None:
+    def except_handler(lang=None):
+        # if issue == 'len_input':
+        #     print('Unexpected number of input', file=sys.stderr)
+        if lang:
             print("Sorry, the program doesn't support", lang, file=sys.stderr)
         else:
             print('Input the number from 1-13', file=sys.stderr)
@@ -33,12 +33,12 @@ class Translator:
 
     def history(self):
         if os.access(self.path, os.R_OK):
-            with open(self.path, 'r') as file_out:
+            with open(self.path, 'r', encoding='utf-8') as file_out:
                 print(file_out.read())
                 exit()
 
     def __init__(self, path='', src_lang='', trans_lang='', word=''):
-        self.file_name = word + '_in_' + trans_lang + '.txt'    # Name of the file in dir
+        self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'    # Name of the file in dir
         self.path = os.path.join(path, self.file_name)          # Path of the file
         self.src_lang = src_lang                                # Source language
         self.trans_lang = trans_lang                            # Translated language
@@ -94,7 +94,7 @@ class Translator:
                 req_obj = requests.get(url, headers={'User-Agent': user_agent})
                 req_obj_list.append(req_obj)
 
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError:
             print('Something wrong with your internet connection', file=sys.stderr)
 
         return req_obj_list
@@ -121,9 +121,9 @@ class Translator:
         if self.src_lang == self.lang_list[self.lang_ind]:
             self.lang_ind += 1
 
-        if self.trans_lang is None:
-            no_examples = no_word = 1
-            final_lang = self.lang_list[self.lang_ind]
+        # if self.trans_lang is None:
+        #     no_examples = no_word = 1
+        #     final_lang = self.lang_list[self.lang_ind]
 
         print(f'{final_lang} Translations:')
         print(*words[:no_word], sep='\n', end='\n\n')

@@ -10,21 +10,23 @@ class Interface(Translator):
         inter.user_inp()
         inter.root.mainloop()
 
-    def dir_hist(self): # changes the current working directory to the history folder
+    def dir_hist(self):  # changes the current working directory to the history folder
         path = os.path.join(self.owd, 'History')
         os.chdir(path)
 
-    def display_interface(self):  # will be used for error handling leave for now
-        messagebox.showwarning('Error', message='Invalid Input')
-
-    def displayList(self):  # Reads the file ONLY IF THE FILE IS PRESENT
+    def displayList(self):
         self.dir_hist()
         mylist = Listbox(self.root, width=400, height=600)
-        with open(self.path, 'r', encoding='utf-8') as file_out:
-            for line in file_out:
-                mylist.insert(END, line)
-        mylist.place(relx=0.35)
-        del mylist
+        print('hello1')
+        if os.access(self.path, os.R_OK):
+            with open(self.path, 'r', encoding='utf-8') as file_out:
+                for line in file_out:
+                    mylist.insert(END, line)
+            mylist.place(relx=0.35)
+            del mylist
+        else:
+            print('hello2')
+            self.err_hand(unknown_word=self.word)
         os.chdir(self.owd)
 
     def check(self):
@@ -36,14 +38,47 @@ class Interface(Translator):
                 self.formatting(req_obj=req_obj)
             self.displayList()
 
+    @staticmethod
+    def err_hand(unknown_lang=None, unknown_word=None, inv_inp=False, same=False):
+        if inv_inp:
+            messagebox.showwarning('Warning!', message=f'Invalid Input')
+        if unknown_lang:
+            messagebox.showwarning('Warning!', message=f'Translator does not support {unknown_lang}')
+        if unknown_word:
+            messagebox.showwarning('Warning!', message=f'No result found for {unknown_word}')
+        if same:
+            messagebox.showwarning('Warning!', message=f'Cannot translate to same the language')
+
+    def err_check(self, src_lang, trans_lang, word):
+        if '' in [src_lang, trans_lang, word]:
+            self.err_hand(inv_inp=True)
+            return False
+        if src_lang == trans_lang:
+            self.err_hand(same=True)
+            return False
+        if src_lang or trans_lang:
+            if src_lang not in self.lang_list:
+                self.err_hand(unknown_lang=src_lang)
+                return False
+            if trans_lang not in self.lang_list:
+                self.err_hand(unknown_lang=trans_lang)
+                return False
+            return True
+        return True
+
     def recall(self, args):
         data = [x.get() for x in args]
         path = self.create_dir()
         src_lang = data[0]
         trans_lang = data[1]
         word = data[2]
-        super().__init__(path=path, src_lang=src_lang, trans_lang=trans_lang, word=word)
-        self.check()
+        signal = self.err_check(src_lang, trans_lang, word)
+        if signal:
+            super().__init__(path=path, src_lang=src_lang, trans_lang=trans_lang, word=word)
+            self.check()
+        else:
+            print('lol')
+            return
 
     def button_src(self):
         # style = ('Courier', 12)
@@ -93,4 +128,3 @@ class Interface(Translator):
 if __name__ == '__main__':
     inter = Interface()
     inter.start()
-

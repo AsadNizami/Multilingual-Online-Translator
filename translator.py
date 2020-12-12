@@ -18,7 +18,8 @@ class Translator:
             print("Sorry, the program doesn't support", lang, file=sys.stderr)
         else:
             print('Input the number from 1-13', file=sys.stderr)
-        exit()
+            return
+        # exit()
 
     @staticmethod
     def create_dir():
@@ -38,7 +39,6 @@ class Translator:
             return False
 
     def __init__(self, path='', src_lang='', trans_lang='', word=''):
-        # print("LOLOLOLO")
         self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'    # Name of the file in dir
         self.path = os.path.join(path, self.file_name)         # Path of the file
         self.src_lang = src_lang                                # Source language
@@ -99,7 +99,7 @@ class Translator:
 
         except requests.exceptions.ConnectionError:
             print('Something wrong with your internet connection', file=sys.stderr)
-
+            return
         return req_obj_list
 
     def parse(self, req_obj):
@@ -114,19 +114,19 @@ class Translator:
 
         except AttributeError:
             print('Sorry, unable to find', self.word, file=sys.stderr)
-            exit()
+            return
+            # exit()
 
-    def formatting(self, req_obj):  
-        words, examples = self.parse(req_obj=req_obj)
+    def formatting(self, req_obj):
+        try:
+            words, examples = self.parse(req_obj=req_obj)
+        except TypeError:
+            return
         no_word = no_examples = 5  # Number of output
         final_lang = self.trans_lang
 
         if self.src_lang == self.lang_list[self.lang_ind]:
             self.lang_ind += 1
-
-        # if self.trans_lang is None:
-        #     no_examples = no_word = 1
-        #     final_lang = self.lang_list[self.lang_ind]
 
         print(f'{final_lang} Translations:')
         print(*words[:no_word], sep='\n', end='\n\n')

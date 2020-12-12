@@ -10,14 +10,13 @@ class Interface(Translator):
         inter.user_inp()
         inter.root.mainloop()
 
-    def dir_hist(self):  # changes the current working directory to the history folder
+    def dir_hist(self):
         path = os.path.join(self.owd, 'History')
         os.chdir(path)
 
     def displayList(self):
         self.dir_hist()
         mylist = Listbox(self.root, width=400, height=600)
-        print('hello1')
         if os.access(self.path, os.R_OK):
             with open(self.path, 'r', encoding='utf-8') as file_out:
                 for line in file_out:
@@ -25,7 +24,6 @@ class Interface(Translator):
             mylist.place(relx=0.35)
             del mylist
         else:
-            print('hello2')
             self.err_hand(unknown_word=self.word)
         os.chdir(self.owd)
 
@@ -41,13 +39,13 @@ class Interface(Translator):
     @staticmethod
     def err_hand(unknown_lang=None, unknown_word=None, inv_inp=False, same=False):
         if inv_inp:
-            messagebox.showwarning('Warning!', message=f'Invalid Input')
+            messagebox.showwarning('Warning', message=f'Invalid Input')
         if unknown_lang:
-            messagebox.showwarning('Warning!', message=f'Translator does not support {unknown_lang}')
+            messagebox.showwarning('Warning', message=f'Translator does not support {unknown_lang}')
         if unknown_word:
-            messagebox.showwarning('Warning!', message=f'No result found for {unknown_word}')
+            messagebox.showwarning('Warning', message=f'No result found for {unknown_word}')
         if same:
-            messagebox.showwarning('Warning!', message=f'Cannot translate to same the language')
+            messagebox.showwarning('Warning', message=f'Cannot translate to same the language')
 
     def err_check(self, src_lang, trans_lang, word):
         if '' in [src_lang, trans_lang, word]:
@@ -69,8 +67,8 @@ class Interface(Translator):
     def recall(self, args):
         data = [x.get() for x in args]
         path = self.create_dir()
-        src_lang = data[0]
-        trans_lang = data[1]
+        src_lang = data[0].capitalize()
+        trans_lang = data[1].capitalize()
         word = data[2]
         signal = self.err_check(src_lang, trans_lang, word)
         if signal:
@@ -81,8 +79,7 @@ class Interface(Translator):
             return
 
     def button_src(self):
-        # style = ('Courier', 12)
-        src_label = Label(self.root, text='Select the source language : ')  # grid(column=0, row=0, padx=10)
+        src_label = Label(self.root, text='Select the source language : ')
         src_label.config(font=self.style)
         src_label.place(relx=0.01, rely=0.02)
         src_lang = StringVar(self.root)
@@ -92,7 +89,7 @@ class Interface(Translator):
         return src_lang
 
     def button_trans(self):
-        trans_label = Label(self.root, text='Select the language to translate to : ')  # grid(column=0, row=0, padx=10)
+        trans_label = Label(self.root, text='Select the language to translate to : ')
         trans_label.place(relx=0.01, rely=0.16)
         trans_label.config(font=self.style)
         trans_lang = StringVar(self.root)
@@ -116,11 +113,11 @@ class Interface(Translator):
         button = Button(self.root, text='Translate', width=20, command=lambda: self.recall(data))
         button.place(relx=0.017, rely=0.5)
 
-    def __init__(self):  # you know what this is
-        self.owd = os.getcwd()
+    def __init__(self):
         super().__init__()
+        self.owd = os.getcwd()
         self.root = Tk()
-        self.root.title('Test')
+        self.root.title('Multilingual Translator')
         self.root.geometry('1200x700')
         self.style = ('Courier', 12)
 

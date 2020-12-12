@@ -83,7 +83,7 @@ class Interface(Translator):
         src_label.config(font=self.style)
         src_label.place(relx=0.01, rely=0.02)
         src_lang = StringVar(self.root)
-        src_drop = ttk.Combobox(self.root, width=35, textvariable=src_lang)
+        src_drop = ttk.Combobox(self.root, width=35, textvariable=src_lang, font=('Arial', 10, 'bold'))
         src_drop['values'] = self.lang_list
         src_drop.place(relx=0.015, rely=0.06)
         return src_lang
@@ -93,14 +93,19 @@ class Interface(Translator):
         trans_label.place(relx=0.01, rely=0.16)
         trans_label.config(font=self.style)
         trans_lang = StringVar(self.root)
-        trans_drop = ttk.Combobox(self.root, width=35, textvariable=trans_lang)
+        trans_drop = ttk.Combobox(self.root, width=35, textvariable=trans_lang, font=('Arial', 10, 'bold'))
         trans_drop['values'] = self.lang_list
         trans_drop.place(relx=0.015, rely=0.2)
         return trans_lang
 
     def inp_word(self):
+        word_label = Label(self.root, text='Enter the word : ',
+                           bd=3)
+        word_label.config(font=self.style)
+        word_label.place(relx=0.01, rely=0.30)
+
         word = StringVar(self.root)
-        wordbox = Entry(self.root, width=45, textvariable=word)
+        wordbox = Entry(self.root, width=45, textvariable=word, font=('Arial', 11, 'bold'))
         wordbox.place(relx=0.015, rely=0.35)
         return word
 
@@ -110,16 +115,17 @@ class Interface(Translator):
         word = self.inp_word()
         data = [src_lang, trans_lang, word]
 
-        button = Button(self.root, text='Translate', width=20, command=lambda: self.recall(data))
+        button = Button(self.root, text='Translate', width=20, command=lambda: self.recall(data), font=self.style)
         button.place(relx=0.017, rely=0.5)
 
     def __init__(self):
         super().__init__()
         self.owd = os.getcwd()
         self.root = Tk()
+        self.root.config(bg='#D8D8D8')
         self.root.title('Multilingual Translator')
         self.root.geometry('1200x700')
-        self.style = ('Courier', 12)
+        self.style = ('Courier', 12, 'bold')
 
 
 if __name__ == '__main__':

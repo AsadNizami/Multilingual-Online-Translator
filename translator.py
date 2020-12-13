@@ -4,14 +4,6 @@ from bs4 import BeautifulSoup
 import os
 
 
-##global variables
-
-global_final_lang = ""
-global_words = ""
-global_examples = ""
-global_no_word = 0
-
-
 class Translator:
 
     def start(self):
@@ -19,12 +11,6 @@ class Translator:
         req_obj_list = self.connect()
         for req_obj in req_obj_list:
             self.formatting(req_obj=req_obj)
-    
-    def display(self):
-        req_obj_list = self.connect()
-        for req_obj in req_obj_list:
-            self.formatting(req_obj=req_obj)
-        return(global_final_lang, global_words, global_examples, global_no_word)
 
     @staticmethod
     def except_handler(lang=None):
@@ -53,11 +39,11 @@ class Translator:
             return False
 
     def __init__(self, path='', src_lang='', trans_lang='', word=''):
-        self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'
-        self.path = os.path.join(path, self.file_name)
-        self.src_lang = src_lang
-        self.trans_lang = trans_lang
-        self.word = word
+        self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'    # Name of the file in dir
+        self.path = os.path.join(path, self.file_name)         # Path of the file
+        self.src_lang = src_lang                                # Source language
+        self.trans_lang = trans_lang                            # Translated language
+        self.word = word                                        # Word to be translated
 
         self.lang_list = [
             'Arabic', 'German', 'English', 'Spanish',
@@ -66,6 +52,7 @@ class Translator:
         self.lang_ind = 0
         if trans_lang:
             self.lang_ind = 1 if not trans_lang == 'Arabic' else 0
+
         if self.history():
             return
 
@@ -141,21 +128,18 @@ class Translator:
         if self.src_lang == self.lang_list[self.lang_ind]:
             self.lang_ind += 1
 
-        # print(f'{final_lang} Examples:')
-        # i = 0
-        # for _ in range(no_examples):
-        #     print(examples[i])
-        #     print(examples[i+1], '\n')
-        #     i += 2
+        print(f'{final_lang} Translations:')
+        print(*words[:no_word], sep='\n', end='\n\n')
+
+        print(f'{final_lang} Examples:')
+        i = 0
+        for _ in range(no_examples):
+            print(examples[i])
+            print(examples[i+1], '\n')
+            i += 2
 
         self.save_2_file(final_lang=final_lang, words=words, examples=examples, no_word=no_word)
         self.lang_ind += 1
-        
-        global global_final_lang, global_words, global_examples, global_no_word
-        global_final_lang = final_lang
-        global_words = words
-        global_examples = examples
-        global_no_word = no_word
 
     def save_2_file(self, final_lang, words, examples, no_word):
         with open(self.path, 'a', encoding='utf-8') as file_out:

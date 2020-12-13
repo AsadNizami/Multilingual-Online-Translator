@@ -2,7 +2,7 @@
 Translates word and gives examples for it's usage.
 
 ## Getting started
-## Download or clone this repository
+ Download or clone this repository
 ```bash
 
 git clone https://github.com/AsadNizami/Multilingual-Translator.git

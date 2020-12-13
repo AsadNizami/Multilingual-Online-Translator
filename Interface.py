@@ -75,6 +75,7 @@ class Interface(Translator):
             super().__init__(path=path, src_lang=src_lang, trans_lang=trans_lang, word=word)
             self.check()
         else:
+            os.chdir(self.owd)
             return
 
     def button_src(self):

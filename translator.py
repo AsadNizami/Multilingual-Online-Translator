@@ -39,11 +39,11 @@ class Translator:
             return False
 
     def __init__(self, path='', src_lang='', trans_lang='', word=''):
-        self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'    # Name of the file in dir
-        self.path = os.path.join(path, self.file_name)         # Path of the file
-        self.src_lang = src_lang                                # Source language
-        self.trans_lang = trans_lang                            # Translated language
-        self.word = word                                        # Word to be translated
+        self.file_name = src_lang + '_to_' + trans_lang + '_' + word + '.txt'
+        self.path = os.path.join(path, self.file_name)
+        self.src_lang = src_lang
+        self.trans_lang = trans_lang
+        self.word = word
 
         self.lang_list = [
             'Arabic', 'German', 'English', 'Spanish',

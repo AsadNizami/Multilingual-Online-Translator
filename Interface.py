@@ -115,7 +115,8 @@ class Interface(Translator):
         word = self.inp_word()
         data = [src_lang, trans_lang, word]
 
-        button = Button(self.root, text='Translate', width=20, command=lambda: self.recall(data), font=self.style)
+        button = Button(self.root, text='Translate', width=20,
+                        command=lambda: self.recall(data), font=self.style)
         button.place(relx=0.017, rely=0.5)
 
     def __init__(self):

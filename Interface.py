@@ -16,7 +16,7 @@ class Interface(Translator):
 
     def displayList(self):
         self.dir_hist()
-        mylist = Listbox(self.root, width=400, height=600)
+        mylist = Listbox(self.root, width=400, height=600, font=('Times', 12))
         if os.access(self.path, os.R_OK):
             with open(self.path, 'r', encoding='utf-8') as file_out:
                 for line in file_out:
@@ -78,7 +78,7 @@ class Interface(Translator):
             return
 
     def button_src(self):
-        src_label = Label(self.root, text='Select the source language : ')
+        src_label = Label(self.root, text='Select the source language : ', bg='#D8D8D8')
         src_label.config(font=self.style)
         src_label.place(relx=0.01, rely=0.02)
         src_lang = StringVar(self.root)
@@ -88,7 +88,7 @@ class Interface(Translator):
         return src_lang
 
     def button_trans(self):
-        trans_label = Label(self.root, text='Select the language to translate to : ')
+        trans_label = Label(self.root, text='Select the language to translate to : ', bg='#D8D8D8')
         trans_label.place(relx=0.01, rely=0.16)
         trans_label.config(font=self.style)
         trans_lang = StringVar(self.root)
@@ -99,7 +99,7 @@ class Interface(Translator):
 
     def inp_word(self):
         word_label = Label(self.root, text='Enter the word : ',
-                           bd=3)
+                           bd=3, bg='#D8D8D8')
         word_label.config(font=self.style)
         word_label.place(relx=0.01, rely=0.30)
 

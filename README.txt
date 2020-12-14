@@ -9,7 +9,9 @@ Group 3
 19/11/EC/017	KUMAR GAURAV
 
 **MULTILINGUAL TRANSLATOR**
--Translates any given word/phrase to another language with examples and saves to a file.
+-Translates any given word/phrase to another language with examples
+ and saves it to a file.
+
 -Supports 8 languages:
   Arabic
   German
@@ -21,4 +23,4 @@ Group 3
   Russian
 
 To install the required packages run:
-pip install -r requirements.txt (On windows)
+pip install -r requirements.txt 	(On windows)

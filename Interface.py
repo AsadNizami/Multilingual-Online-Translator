@@ -8,7 +8,6 @@ import os
 class Interface(Translator):
     @staticmethod
     def start():
-        # inter.user_inp()
         inter.front_image()
         inter.quit_cont_btns()
         inter.root.mainloop()
@@ -87,7 +86,6 @@ class Interface(Translator):
                           font=("Calibri", 20), fg="dodgerblue", bg="#fff")
         src_label.pack(fill=BOTH, padx=10, pady=10)
         src_lang = StringVar(self.frame1)
-        # src_lang.set("Eg. English")
         src_drop = ttk.Combobox(self.frame1, textvariable=src_lang, font=self.style)
         src_drop['values'] = self.lang_list
         src_drop.pack(fill=X, padx=25, pady=15)
@@ -98,7 +96,6 @@ class Interface(Translator):
                             font=("Calibri", 20), fg="dodgerblue", bg="#fff")
         trans_label.pack(fill=BOTH, padx=10, pady=10)
         trans_lang = StringVar(self.frame1)
-        # trans_lang.set("Eg. English")
         trans_drop = ttk.Combobox(self.frame1, textvariable=trans_lang, font=self.style)
         trans_drop['values'] = self.lang_list
         trans_drop.pack(fill=X, padx=25, pady=15)
@@ -109,7 +106,6 @@ class Interface(Translator):
         word_label.pack(fill=BOTH, padx=10, pady=10)
 
         word = StringVar(self.frame1)
-        # word.set("Eg. Word")
         wordbox = Entry(self.frame1, textvariable=word, font=self.style, borderwidth=2)
         wordbox.pack(fill=X, padx=25, pady=15)
         return word
@@ -151,7 +147,7 @@ class Interface(Translator):
     def next_window(self):
         widget_list = self.root.winfo_children()
         for item in widget_list:
-            item.pack_forget()      # to hide the widgets and lost their positions
+            item.pack_forget()
 
         self.create_layout()
 

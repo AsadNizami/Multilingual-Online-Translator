@@ -10,7 +10,6 @@ class Interface(Translator):
     def start():
         # inter.user_inp()
         inter.front_image()
-        inter.set_geometry()
         inter.quit_cont_btns()
         inter.root.mainloop()
 
@@ -87,7 +86,7 @@ class Interface(Translator):
         src_label = Label(self.frame1, text='Select the source language :', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
         src_label.pack(fill=BOTH, padx=10, pady=10)
         src_lang = StringVar(self.frame1)
-        src_lang.set("Eg. English")
+        # src_lang.set("Eg. English")
         src_drop = ttk.Combobox(self.frame1, textvariable=src_lang, font=self.style)
         src_drop['values'] = self.lang_list
         src_drop.pack(fill=X, padx=25, pady=15)
@@ -97,7 +96,7 @@ class Interface(Translator):
         trans_label = Label(self.frame1, text='Select the language to translate to : ', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
         trans_label.pack(fill=BOTH, padx=10, pady=10)
         trans_lang = StringVar(self.frame1)
-        trans_lang.set("Eg. English")
+        # trans_lang.set("Eg. English")
         trans_drop = ttk.Combobox(self.frame1, textvariable=trans_lang, font=self.style)
         trans_drop['values'] = self.lang_list
         trans_drop.pack(fill=X, padx=25, pady=15)
@@ -108,8 +107,8 @@ class Interface(Translator):
         word_label.pack(fill=BOTH, padx=10, pady=10)
 
         word = StringVar(self.frame1)
-        word.set("Eg. Word")
-        wordbox = Entry(self.frame1, textvariable=word, font=self.style)
+        # word.set("Eg. Word")
+        wordbox = Entry(self.frame1, textvariable=word, font=self.style, borderwidth=2)
         wordbox.pack(fill=X, padx=25, pady=15)
         return word
 
@@ -125,19 +124,6 @@ class Interface(Translator):
         t_btn.pack(side=LEFT, expand=True)
         t_btn.image = b3
 
-    def set_geometry(self):
-        self.root.resizable(False, False)  # This code helps to disable windows from resizing
-
-        window_height = 600
-        window_width = 900
-
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
-
-        x_cordinate = int((screen_width/2) - (window_width/2))
-        y_cordinate = int((screen_height/2) - (window_height/2))
-
-        self.root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
 
     def front_image(self):
         img_name = Image.open('image/logo.PNG')
@@ -166,14 +152,14 @@ class Interface(Translator):
         for item in widget_list:
             item.pack_forget()      # to hide the widgets and lost thier positions
 
-        self.root.resizable(True, True)
-        self.root.geometry("%dx%d+-8+0" % (self.root.winfo_screenwidth(), self.root.winfo_screenheight()))
+        # self.root.resizable(True, True)
+        # self.root.geometry("%dx%d+-8+0" % (self.root.winfo_screenwidth(), self.root.winfo_screenheight()))
+        # self.root.geometry('1200x700')
 
         self.create_layout()
 
-    # @staticmethod
     def create_layout(self):
-        self.frame1 = self.create_frames(3, "#f1f1f1")
+        self.frame1 = self.create_frames(3, "white")
         self.frame2 = self.create_frames(2, "#f8f8f8")
         inter.user_inp()
 
@@ -192,6 +178,8 @@ class Interface(Translator):
         self.style = ("Courier", 16, "bold")
         self.root.option_add('*TCombobox*Listbox.font', self.style)
         self.frame1 = self.frame2 = None
+        self.root.geometry('1200x700')
+
 
 if __name__ == '__main__':
     inter = Interface()

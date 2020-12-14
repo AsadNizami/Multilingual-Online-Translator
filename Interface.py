@@ -1,13 +1,17 @@
 from tkinter import *
 from tkinter import messagebox, ttk
 from translator import Translator
+from PIL import Image, ImageTk
 import os
 
 
 class Interface(Translator):
     @staticmethod
     def start():
-        inter.user_inp()
+        # inter.user_inp()
+        inter.front_image()
+        inter.set_geometry()
+        inter.quit_cont_btns()
         inter.root.mainloop()
 
     def dir_hist(self):
@@ -79,34 +83,33 @@ class Interface(Translator):
             return
 
     def button_src(self):
-        src_label = Label(self.root, text='Select the source language : ', bg='#D8D8D8')
-        src_label.config(font=self.style)
-        src_label.place(relx=0.01, rely=0.02)
-        src_lang = StringVar(self.root)
-        src_drop = ttk.Combobox(self.root, width=35, textvariable=src_lang, font=('Arial', 10, 'bold'))
+        src_label = Label(self.frame1, text='Select the source language :', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
+        src_label.pack(fill=BOTH, padx=10, pady=10)
+        src_lang = StringVar(self.frame1)
+        src_lang.set("Eg. English")
+        src_drop = ttk.Combobox(self.frame1, textvariable=src_lang, font=self.style)
         src_drop['values'] = self.lang_list
-        src_drop.place(relx=0.015, rely=0.06)
+        src_drop.pack(fill=X, padx=25, pady=15)
         return src_lang
 
     def button_trans(self):
-        trans_label = Label(self.root, text='Select the language to translate to : ', bg='#D8D8D8')
-        trans_label.place(relx=0.01, rely=0.16)
-        trans_label.config(font=self.style)
-        trans_lang = StringVar(self.root)
-        trans_drop = ttk.Combobox(self.root, width=35, textvariable=trans_lang, font=('Arial', 10, 'bold'))
+        trans_label = Label(self.frame1, text='Select the language to translate to : ', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
+        trans_label.pack(fill=BOTH, padx=10, pady=10)
+        trans_lang = StringVar(self.frame1)
+        trans_lang.set("Eg. English")
+        trans_drop = ttk.Combobox(self.frame1, textvariable=trans_lang, font=self.style)
         trans_drop['values'] = self.lang_list
-        trans_drop.place(relx=0.015, rely=0.2)
+        trans_drop.pack(fill=X, padx=25, pady=15)
         return trans_lang
 
     def inp_word(self):
-        word_label = Label(self.root, text='Enter the word : ',
-                           bd=3, bg='#D8D8D8')
-        word_label.config(font=self.style)
-        word_label.place(relx=0.01, rely=0.30)
+        word_label = Label(self.frame1, text='Enter the word : ', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
+        word_label.pack(fill=BOTH, padx=10, pady=10)
 
-        word = StringVar(self.root)
-        wordbox = Entry(self.root, width=45, textvariable=word, font=('Arial', 11, 'bold'))
-        wordbox.place(relx=0.015, rely=0.35)
+        word = StringVar(self.frame1)
+        word.set("Eg. Word")
+        wordbox = Entry(self.frame1, textvariable=word, font=self.style)
+        wordbox.pack(fill=X, padx=25, pady=15)
         return word
 
     def user_inp(self):
@@ -115,19 +118,79 @@ class Interface(Translator):
         word = self.inp_word()
         data = [src_lang, trans_lang, word]
 
-        button = Button(self.root, text='Translate', width=20,
-                        command=lambda: self.recall(data), font=self.style)
-        button.place(relx=0.017, rely=0.5)
+        tran_btn_img = Image.open('image/button_translate.png')
+        b3 = ImageTk.PhotoImage(tran_btn_img)
+        t_btn = Button(self.frame1, image=b3, bg="#fafafa", borderwidth=0,command=lambda: self.recall(data), font=self.style)
+        t_btn.pack(side=LEFT, expand=True)
+        t_btn.image = b3
+
+    def set_geometry(self):
+        self.root.resizable(False, False)  # This code helps to disable windows from resizing
+
+        window_height = 600
+        window_width = 900
+
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        x_cordinate = int((screen_width/2) - (window_width/2))
+        y_cordinate = int((screen_height/2) - (window_height/2))
+
+        self.root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+
+    def front_image(self):
+        img_name = Image.open('image/logo.PNG')
+        photo = ImageTk.PhotoImage(img_name)
+        img_label = Label(self.root, image=photo, borderwidth=0, bg="#fafafa")
+        img_label.image = photo
+        img_label.pack(fill=BOTH)
+
+    def quit_cont_btns(self):
+        # Quit Button
+        quit_btn_img = Image.open('image/button_quit.png')
+        b1 = ImageTk.PhotoImage(quit_btn_img)
+        q_btn = Button(self.root, image=b1, bg="#fafafa", borderwidth=0, command=lambda: self.root.destroy())
+        q_btn.pack(side=LEFT, expand=True)
+        q_btn.image = b1
+
+        # Continue Button
+        cont_btn_img = Image.open('image/button_continue.png')
+        b2 = ImageTk.PhotoImage(cont_btn_img)
+        c_btn = Button(self.root, image=b2, bg="#fafafa", borderwidth=0, command=lambda: self.next_window())
+        c_btn.pack(side=RIGHT, expand=True)
+        c_btn.image = b2
+
+    def next_window(self):
+        widget_list = self.root.winfo_children()
+        for item in widget_list:
+            item.pack_forget()      # to hide the widgets and lost thier positions
+
+        self.root.resizable(True, True)
+        self.root.geometry("%dx%d+-8+0" % (self.root.winfo_screenwidth(), self.root.winfo_screenheight()))
+
+        self.create_layout()
+
+    # @staticmethod
+    def create_layout(self):
+        self.frame1 = self.create_frames(3, "#f1f1f1")
+        self.frame2 = self.create_frames(2, "#f8f8f8")
+        inter.user_inp()
+
+    def create_frames(self, val, bg_col):
+        wid = self.root.winfo_screenwidth()
+        f = Frame(self.root, bg=bg_col, width=wid / val)
+        f.pack(fill=BOTH, side=LEFT, expand=True)
+        return f
 
     def __init__(self):
         super().__init__()
         self.owd = os.getcwd()
         self.root = Tk()
-        self.root.config(bg='#D8D8D8')
+        self.root.config(bg="#fafafa")
         self.root.title('Multilingual Translator')
-        self.root.geometry('1200x700')
-        self.style = ('Courier', 12, 'bold')
-
+        self.style = ("Courier", 16, "bold")
+        self.root.option_add('*TCombobox*Listbox.font', self.style)
+        self.frame1 = self.frame2 = None
 
 if __name__ == '__main__':
     inter = Interface()

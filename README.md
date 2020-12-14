@@ -1,3 +1,5 @@
+<img src="/image/logo.PNG" width="40%">
+
 # Multilingual-Translator
 Translates word and gives examples for it's usage.
 
@@ -42,4 +44,4 @@ python Interface.py
 * Russian
 
 ### Usage:
-![Test Output](image/usage.PNG)
+<img src="/image/Capture.PNG" width="70%">

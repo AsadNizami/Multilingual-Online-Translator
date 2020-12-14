@@ -66,7 +66,7 @@ class Translator:
         if not all([0 < src_lang < 13, 0 <= trans_lang < 13]):
             self.except_handler()
         word = input('Type the word you want to translate: ')
-        path = ''
+        # path = ''
         path = self.create_dir()
         self.__init__(path=path, src_lang=self.lang_list[src_lang-1], trans_lang=self.lang_list[trans_lang-1], word=word)
 
@@ -98,8 +98,9 @@ class Translator:
                 req_obj_list.append(req_obj)
 
         except requests.exceptions.ConnectionError:
-            print('Something wrong with your internet connection', file=sys.stderr)
-            return
+            print('Check your internet connection\n If error persists contact "asadnizami123@gmail.com"',
+                  file=sys.stderr)
+            exit()
         return req_obj_list
 
     def parse(self, req_obj):

@@ -9,7 +9,7 @@ Group 3
 19/11/EC/017	KUMAR GAURAV
 
 **MULTILINGUAL TRANSLATOR**
--Translates any given word/phrase to another language with examples.
+-Translates any given word/phrase to another language with examples and saves to a file.
 -Supports 8 languages:
   Arabic
   German

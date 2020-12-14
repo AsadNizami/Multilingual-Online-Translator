@@ -83,8 +83,7 @@ class Interface(Translator):
             return
 
     def button_src(self):
-        src_label = Label(self.frame1, text='Select the source language :',
-                          font=("Calibri", 20), fg="dodgerblue", bg="#fff")
+        src_label = Label(self.frame1, text='Select the source language :', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
         src_label.pack(fill=BOTH, padx=10, pady=10)
         src_lang = StringVar(self.frame1)
         # src_lang.set("Eg. English")
@@ -94,8 +93,7 @@ class Interface(Translator):
         return src_lang
 
     def button_trans(self):
-        trans_label = Label(self.frame1, text='Select the language to translate to : ',
-                            font=("Calibri", 20), fg="dodgerblue", bg="#fff")
+        trans_label = Label(self.frame1, text='Select the language to translate to : ', font=("Calibri", 20), fg="dodgerblue", bg="#fff")
         trans_label.pack(fill=BOTH, padx=10, pady=10)
         trans_lang = StringVar(self.frame1)
         # trans_lang.set("Eg. English")
@@ -126,6 +124,7 @@ class Interface(Translator):
         t_btn.pack(side=LEFT, expand=True)
         t_btn.image = b3
 
+
     def front_image(self):
         img_name = Image.open('image/logo.PNG')
         photo = ImageTk.PhotoImage(img_name)
@@ -151,7 +150,11 @@ class Interface(Translator):
     def next_window(self):
         widget_list = self.root.winfo_children()
         for item in widget_list:
-            item.pack_forget()      # to hide the widgets and lost their positions
+            item.pack_forget()      # to hide the widgets and lost thier positions
+
+        # self.root.resizable(True, True)
+        # self.root.geometry("%dx%d+-8+0" % (self.root.winfo_screenwidth(), self.root.winfo_screenheight()))
+        # self.root.geometry('1200x700')
 
         self.create_layout()
 

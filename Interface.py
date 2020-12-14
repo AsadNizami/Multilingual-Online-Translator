@@ -20,12 +20,13 @@ class Interface(Translator):
 
     def displayList(self):
         self.dir_hist()
-        mylist = Listbox(self.root, width=400, height=600, font=('Times', 12))
+        mylist = Text(self.frame2, font=('Arial', 15), bg="#f8f8f8", borderwidth=0)
+        mylist.config(height=self.frame2.winfo_screenheight(), width=self.frame2.winfo_screenwidth(), padx=10, pady=10)
         if os.access(self.path, os.R_OK):
             with open(self.path, 'r', encoding='utf-8') as file_out:
                 for line in file_out:
                     mylist.insert(END, line)
-            mylist.place(relx=0.35)
+            mylist.place(relx=0, rely=0)
             del mylist
         else:
             self.err_hand(unknown_word=self.word)
